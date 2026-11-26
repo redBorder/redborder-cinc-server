@@ -24,7 +24,9 @@ echo "1000000" > /proc/sys/fs/file-max
 export GEM_PATH=/opt/cinc-project/embedded/service/gem/ruby/3.1.0
 export GEM_HOME=/opt/cinc-project/embedded/service/gem/ruby/3.1.0 
 
-exec /opt/cinc-project/embedded/bin/veil-env-helper -f /etc/cinc-project/private-cinc-secrets.json -o DATA_COLLECTOR_TOKEN=data_collector.token -s REDIS_PASSWORD=redis_lb.password -- \
+SECRETS=${CHEF_SECRETS_FILE:-/etc/cinc-project/private-cinc-secrets.json}
+
+exec /opt/cinc-project/embedded/bin/veil-env-helper -f "$SECRETS" -o DATA_COLLECTOR_TOKEN=data_collector.token -s REDIS_PASSWORD=redis_lb.password -- \
   chpst \
   -P env TZ=UTC \
   /opt/cinc-project/embedded/sbin/nginx -c /var/opt/cinc-project/nginx/etc/nginx.conf
